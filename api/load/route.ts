@@ -1,4 +1,4 @@
-import { module } from "../../core/types";
+import { module } from "../../core/types"
 
 const mod: module = [
     {

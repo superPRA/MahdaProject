@@ -17,7 +17,7 @@ export default async function core(req: Request, res: Response) {
             error: "formId is not included",
         });
     try {
-        mod = await import(`../modules/${context.body.formId}/route`).then(
+        mod = await import(`../api/${context.body.formId}/route`).then(
             (q) => q.default
         );
         console.log(mod);
