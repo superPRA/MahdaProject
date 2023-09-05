@@ -43,15 +43,15 @@ export type modReturn =
 
 export type context = {
     body: {
-        [index: string]: unknown;
+        [index: string]: any;
     };
     action: {
-        [index: string]: unknown;
+        [index: string]: any;
     };
-    [index: string]: unknown;
+    [index: string]: any;
 };
 
 export type helpers = {
-    
+    getRandomContinusId: ()=>string
 };
 
