@@ -1,0 +1,20 @@
+name: CD-Liara
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - name: update-liara
+        env:
+          LIARA_TOKEN: ${{ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2M2ExN2RiOTVhN2MzNTdjYmZlNzk0YjgiLCJpYXQiOjE2OTM5MTg5OTR9.-_S6o3Acgd9dBnh7UjDy8TG5uZxVLjBJ92d1Spn_zLs }}
+        run: |
+          npm i -g @liara/cli@4
+          liara deploy --app="faraz-project" --api-token="$LIARA_TOKEN" --detach
