@@ -4,7 +4,7 @@ const mod: module = [
     {
         checkout: (context) => {
             const bd = context.body.data;
-            if (!bd || !bd._id || !bd._category_id || !bd.name || !bd.info || !bd.meta || !bd.amount || !bd.imgs) return "no body";
+            if (!bd || !bd._id || !bd._category_id || !bd.name || !bd.info || !bd.meta || !bd.amount || !bd.imgs) return "no body"
             return true;
         },
         dbset: (context,helpers) => {
