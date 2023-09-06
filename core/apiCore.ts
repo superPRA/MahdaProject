@@ -3,7 +3,7 @@ import pool from "../utils/connctDb";
 import { context, poolResponse } from "./types";
 import { getRandomContinusId } from "./helper";
 
-export default async function core(req: Request, res: Response) {
+export default async function apiCore(req: Request, res: Response) {
     const context: context = {
         body: req.body,
         action: {},
@@ -81,7 +81,5 @@ export default async function core(req: Request, res: Response) {
                 });
             }
         }
-
-        return res.send("hi");
     }
 }

@@ -11,15 +11,16 @@ const mod: module = [
                 !bd.info ||
                 !bd.meta ||
                 !bd.amount ||
-                !bd.imgs
+                !bd.imgs || 
+                !bd.sale.toString()
             )
-                return "no body";
+                return "no body " + JSON.stringify(bd);
             return true;
         },
         dbset: (context, helpers) => {
             const bd = context.body.data;
             return {
-                sql: `INSERT INTO products(_id,_category_id,name,info,meta,amount,imgs,_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,
+                sql: `INSERT INTO products(_id,_category_id,name,info,meta,amount,imgs,_by,sale) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
                 value: [
                     "PR" + helpers.getRandomContinusId(),
                     bd._category_id,
@@ -29,6 +30,7 @@ const mod: module = [
                     bd.amount,
                     bd.imgs,
                     "dev",
+                    bd.sale
                 ],
                 next(res) {
                     return res;
