@@ -1,7 +1,8 @@
 import express, { Express, Request, Response , Application, request } from 'express';
 import dotenv from 'dotenv';
-import core from './core/main';
+import apiCore from './core/apiCore';
 import cors from "cors"
+import apisCore from './core/apisCore';
 
 dotenv.config();
 
@@ -15,4 +16,5 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Express & TypeScript Server');
 });
 
-app.post('/api/v0', core);
+app.post('/api/v0', apiCore);
+app.post('/api/v1', apisCore)

@@ -4,7 +4,7 @@ const mod: module = [
     {
         checkout: (context, helpers)=>{
             const bd = context.body.data
-            if(!bd) return "no body"
+            if(!bd) return "no body 1"
         },
         fetch: (context)=>{
             const bd = context.body.data
@@ -12,7 +12,7 @@ const mod: module = [
                 sql: "SELECT * FROM products",
                 value: [],
                 next(res) {
-                    return res
+                    return res.rows
                 },
             }
         },

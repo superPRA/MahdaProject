@@ -2,7 +2,6 @@ export type module = {
     [index: string]: (context: context, helpers: helpers) => modReturn;
 }[];
 
-
 export type poolResponse = {
     command: string;
     rowCount: number;
@@ -17,7 +16,7 @@ export type poolResponse = {
         dataTypeModifier: number;
         format: string;
     }[];
-}
+};
 export type modReturn =
     | true
     | false
@@ -41,6 +40,7 @@ export type modReturn =
           message?: string;
       };
 
+
 export type context = {
     body: {
         [index: string]: any;
@@ -52,6 +52,5 @@ export type context = {
 };
 
 export type helpers = {
-    getRandomContinusId: ()=>string
+    getRandomContinusId: () => string;
 };
-

@@ -1,16 +1,16 @@
-import { module } from "../../../../core/types"
+import { module } from "../../../../../core/types"
 
 const mod: module = [
     {
         checkout: (context, helpers)=>{
             const bd = context.body.data
-            if(!bd) return "no body 2"
+            if(!bd || !bd.sale || !bd.sale.start.toString() || !bd.sale.end.toString()) return "no body"
         },
         fetch: (context)=>{
             const bd = context.body.data
             return {
-                sql: "SELECT * FROM category",
-                value: [],
+                sql: "SELECT * FROM products WHERE sale <= $1 AND sale >= $2",
+                value: [bd.sale.end, bd.sale.start],
                 next(res) {
                     return res.rows
                 },
@@ -19,7 +19,7 @@ const mod: module = [
         response: (context)=>{
             return {
                 "data-provider": {
-                    category: context.action.fetch
+                    products: context.action.fetch
                 }
             }
         }
