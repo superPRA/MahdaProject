@@ -46,61 +46,69 @@ export default async function apisCore(req: Request, res: Response) {
         context.body.data = req.body.data[m]
         list: for (let i = 0; i < mod.length; i++) {
             context.action = {}
-            for (let j = 0; j < Object.keys(mod[i]).length; j++) {
-                const key = Object.keys(mod[i])[j];
-                const value = mod[i][key](context, helpers);
-                if (typeof value === "string") {
-                    response.push({
-                        done: false,
-                        error: "",
-                        message: value,
-                    });
-                    continue list
-                } else if (value === false) {
-                    continue list;
-                } else if (value === true) {
-                    context.action[key] = value;
-                    continue;
-                } else if (
-                    typeof value === "object" &&
-                    "data-provider" in value
-                ) {
-                    response.push({
-                        done: true,
-                        ...value,
-                    });
-                    continue list
-                } else if (typeof value === "object" && "sql" in value) {
-                    try {
-                        const res = await pool
-                            .query(value.sql, value.value || [])
-                            .then((response: poolResponse) => {
-                                if (typeof value.next === "function") {
-                                    return value.next(response);
-                                }
-                                return response;
-                            });
+            try {
 
-                        context.action[key] = res;
-                    } catch (err) {
-                        if (typeof value.onError === "function") {
-                            response.push({
-                                done: false,
-                                error: "",
-                                message: value.onError(err),
-                            });
+                for (let j = 0; j < Object.keys(mod[i]).length; j++) {
+                    const key = Object.keys(mod[i])[j];
+                    const value = mod[i][key](context, helpers);
+                    if (typeof value === "string") {
+                        response.push({
+                            done: false,
+                            error: "",
+                            message: value,
+                        });
+                        continue list
+                    } else if (value === false) {
+                        continue list;
+                    } else if (value === true) {
+                        context.action[key] = value;
+                        continue;
+                    } else if (
+                        typeof value === "object" &&
+                        "data-provider" in value
+                    ) {
+                        response.push({
+                            done: true,
+                            ...value,
+                        });
+                        continue list
+                    } else if (typeof value === "object" && "sql" in value) {
+                        try {
+                            const res = await pool
+                                .query(value.sql, value.value || [])
+                                .then((response: poolResponse) => {
+                                    if (typeof value.next === "function") {
+                                        return value.next(response);
+                                    }
+                                    return response;
+                                });
+    
+                            context.action[key] = res;
+                        } catch (err) {
+                            if (typeof value.onError === "function") {
+                                response.push({
+                                    done: false,
+                                    error: "",
+                                    message: value.onError(err),
+                                });
+                                continue list
+                            }
+                            response.push({ err });
                             continue list
                         }
-                        response.push({ err });
+                    } else if (typeof value === "object" && "error" in value) {
+                        response.push({
+                            done: false,
+                            ...value,
+                        });
                         continue list
                     }
-                } else if (typeof value === "object" && "error" in value) {
-                    response.push({
-                        done: false,
-                        ...value,
-                    });
-                    continue list
                 }
+            } catch (err) {
+                return res.json({
+                    err,
+                    error: "error in module"
+                })
             }
         }
     }
